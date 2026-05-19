@@ -3,14 +3,14 @@ import cors from "cors";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { execFile } from "child_process";
+import fetch from "node-fetch";
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 const DB_PATH = path.join(__dirname, "inventario.json");
-const SCRIPT_PATH = path.join(__dirname, "generar_factura.py");
 const FACTURAS_DIR = path.join(__dirname, "facturas");
 
 app.use(cors());
@@ -123,7 +123,7 @@ app.get("/stats", (req, res) => {
 });
 
 // POST /ventas — registrar venta y generar factura PDF
-app.post("/ventas", (req, res) => {
+app.post("/ventas", async (req, res) => {
   const { cliente, items } = req.body;
   // items: [{ codigo, cantidad }]
   if (!cliente || !items?.length)
@@ -149,25 +149,23 @@ app.post("/ventas", (req, res) => {
   const nombreArchivo = `Factura_${numero.replace("-", "_")}.pdf`;
   const rutaArchivo = path.join(FACTURAS_DIR, nombreArchivo);
 
-  // Llama al script Python para generar el PDF
-  const payload = JSON.stringify({ numero, cliente, items, inv });
-  execFile("python", [SCRIPT_PATH, payload, rutaArchivo], (err, stdout, stderr) => {
-    if (err) {
-      console.error("ERROR PYTHON:", err);
-      console.error("STDERR:", stderr);
-
-      execFile("python3", [SCRIPT_PATH, payload, rutaArchivo], (err2, stdout2, stderr2) => {
-        if (err2) {
-          console.error("ERROR PYTHON3:", err2);
-          console.error("STDERR2:", stderr2);
-          return res.status(500).json({ error: "Error al generar PDF." });
-        }
-        res.json({ ok: true });
-      });
-      return;
-    }
-    res.json({ ok: true });
+  const response = await fetch("https://pdf-service-k7vt.onrender.com/generar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      numero,
+      cliente,
+      items,
+      inv
+    })
   });
+  const pdfBuffer = await response.arrayBuffer();
+  const rutaArchivo = `./facturas/Factura_${numero}.pdf`;
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", `attachment; filename=Factura_${numero}.pdf`);
+  res.send(Buffer.from(pdfBuffer));
 });
 
 // GET /facturas — lista de facturas generadas
