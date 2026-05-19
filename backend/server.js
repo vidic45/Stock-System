@@ -178,4 +178,8 @@ app.get("/facturas-lista", (req, res) => {
   res.json(archivos);
 });
 
+app.get("/", (req, res) => {
+  res.send("API funcionando 🚀");
+});
+
 app.listen(PORT, () => console.log(`✅ Backend corriendo en http://localhost:${PORT}`));
