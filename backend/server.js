@@ -7,7 +7,7 @@ import { execFile } from "child_process";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 const DB_PATH = path.join(__dirname, "inventario.json");
 const SCRIPT_PATH = path.join(__dirname, "generar_factura.py");
