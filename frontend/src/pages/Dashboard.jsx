@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const API = "http://localhost:3001";
+const API = "https://pdf-service-k7vt.onrender.com";
 
 export default function Dashboard({ onNav }) {
   const [stats, setStats] = useState(null);
@@ -9,13 +9,15 @@ export default function Dashboard({ onNav }) {
 
   useEffect(() => {
     Promise.all([
-      fetch(`${API}/stats`).then(r => r.json()),
-      fetch(`${API}/productos`).then(r => r.json()),
-    ]).then(([s, prods]) => {
-      setStats(s);
-      setAlertas(prods.filter(p => p.estado !== "ok"));
-      setLoading(false);
-    }).catch(() => setLoading(false));
+      fetch(`${API}/stats`).then((r) => r.json()),
+      fetch(`${API}/productos`).then((r) => r.json()),
+    ])
+      .then(([s, prods]) => {
+        setStats(s);
+        setAlertas(prods.filter((p) => p.estado !== "ok"));
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   if (loading) return <div className="empty">Cargando...</div>;
@@ -49,8 +51,13 @@ export default function Dashboard({ onNav }) {
       {alertas.length > 0 && (
         <div className="card card-pad" style={{ marginBottom: 20 }}>
           <div className="section-header">
-            <h3 style={{ fontSize: 15, fontWeight: 700 }}>⚠️ Alertas de stock</h3>
-            <button className="btn btn-ghost btn-sm" onClick={() => onNav("inventario")}>
+            <h3 style={{ fontSize: 15, fontWeight: 700 }}>
+              ⚠️ Alertas de stock
+            </h3>
+            <button
+              className="btn btn-ghost btn-sm"
+              onClick={() => onNav("inventario")}
+            >
               Ver inventario →
             </button>
           </div>
@@ -66,7 +73,7 @@ export default function Dashboard({ onNav }) {
                 </tr>
               </thead>
               <tbody>
-                {alertas.map(p => (
+                {alertas.map((p) => (
                   <tr key={p.codigo}>
                     <td className="mono">{p.codigo}</td>
                     <td style={{ fontWeight: 600 }}>{p.nombre}</td>
@@ -74,7 +81,9 @@ export default function Dashboard({ onNav }) {
                     <td className="mono">{p.minimo}</td>
                     <td>
                       <span className={`badge ${p.estado}`}>
-                        {p.estado === "agotado" ? "❌ Agotado" : "⚠️ Stock bajo"}
+                        {p.estado === "agotado"
+                          ? "❌ Agotado"
+                          : "⚠️ Stock bajo"}
                       </span>
                     </td>
                   </tr>
@@ -87,7 +96,9 @@ export default function Dashboard({ onNav }) {
 
       {/* Accesos rápidos */}
       <div className="card card-pad">
-        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Accesos rápidos</h3>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>
+          Accesos rápidos
+        </h3>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <button className="btn btn-primary" onClick={() => onNav("venta")}>
             🧾 Nueva Venta

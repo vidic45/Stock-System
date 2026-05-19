@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const API = "http://localhost:3001";
+const API = "https://pdf-service-k7vt.onrender.com";
 
 export default function Facturas() {
   const [facturas, setFacturas] = useState([]);
@@ -8,8 +8,11 @@ export default function Facturas() {
 
   useEffect(() => {
     fetch(`${API}/facturas-lista`)
-      .then(r => r.json())
-      .then(d => { setFacturas(d); setLoading(false); });
+      .then((r) => r.json())
+      .then((d) => {
+        setFacturas(d);
+        setLoading(false);
+      });
   }, []);
 
   if (loading) return <div className="empty">Cargando facturas...</div>;
@@ -22,7 +25,9 @@ export default function Facturas() {
       <div className="card">
         <div className="table-wrap">
           {facturas.length === 0 ? (
-            <div className="empty">Aún no hay facturas. Registra una venta primero.</div>
+            <div className="empty">
+              Aún no hay facturas. Registra una venta primero.
+            </div>
           ) : (
             <table>
               <thead>
@@ -35,8 +40,12 @@ export default function Facturas() {
               <tbody>
                 {facturas.map((f, i) => (
                   <tr key={f}>
-                    <td className="mono" style={{ color: "var(--muted)" }}>{facturas.length - i}</td>
-                    <td style={{ fontWeight: 600 }}>{f.replace(".pdf", "").replace(/_/g, "-")}</td>
+                    <td className="mono" style={{ color: "var(--muted)" }}>
+                      {facturas.length - i}
+                    </td>
+                    <td style={{ fontWeight: 600 }}>
+                      {f.replace(".pdf", "").replace(/_/g, "-")}
+                    </td>
                     <td>
                       <a
                         href={`${API}/facturas/${f}`}
