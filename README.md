@@ -4,6 +4,11 @@ Sistema de inventario y facturación PDF para pequeñas empresas.
 Desarrollado en Chiclayo, Perú 🇵🇪
 
 ---
+## Screenshots
+[!DEMO] (/screenshots/dashboard.png)
+[!DEMO] (/screenshots/Factura.png)
+
+---
 
 ## Stack
 
