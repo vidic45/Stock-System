@@ -5,8 +5,9 @@ Desarrollado en Chiclayo, Perú 🇵🇪
 
 ---
 ## Screenshots
-![DEMO] (/screenshots/dashboard.png)
-![DEMO] (/screenshots/Factura.png)
+
+![DEMO](/screenshots/dashboard.png)
+![DEMO](/screenshots/Factura.png)
 
 ---
 
