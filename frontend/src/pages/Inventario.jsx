@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useToast } from "../components/useToast.jsx";
 
-const API = "https://pdf-service-k7vt.onrender.com";
+const API = "https://stock-system-backend-3nom.onrender.com";
 
 const VACIO = { codigo: "", nombre: "", precio: "", stock: "", minimo: "" };
 

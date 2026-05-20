@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { useToast } from "../components/useToast.jsx";
 
-const API = "https://pdf-service-k7vt.onrender.com";
+fetch("https://stock-system-backend-3nom.onrender.com/ventas", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(dataVenta),
+});
 
 export default function NuevaVenta() {
   const [productos, setProductos] = useState([]);

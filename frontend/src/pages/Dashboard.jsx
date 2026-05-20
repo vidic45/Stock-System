@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const API = "https://pdf-service-k7vt.onrender.com";
+const API = "https://stock-system-backend-3nom.onrender.com";
 
 export default function Dashboard({ onNav }) {
   const [stats, setStats] = useState(null);

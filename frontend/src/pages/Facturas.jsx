@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const API = "https://pdf-service-k7vt.onrender.com";
+const API = "https://stock-system-backend-3nom.onrender.com";
 
 export default function Facturas() {
   const [facturas, setFacturas] = useState([]);
