@@ -147,7 +147,6 @@ app.post("/ventas", async (req, res) => {
 
   const numero = getNextFactura();
   const nombreArchivo = `Factura_${numero.replace("-", "_")}.pdf`;
-  const rutaArchivo = path.join(FACTURAS_DIR, nombreArchivo);
 
   const response = await fetch("https://pdf-service-k7vt.onrender.com/generar", {
     method: "POST",
@@ -161,6 +160,9 @@ app.post("/ventas", async (req, res) => {
       inv
     })
   });
+  if (!response.ok) {
+  return res.status(500).json({ error: "Error generando PDF" });
+  }
   const pdfBuffer = await response.arrayBuffer();
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Disposition", `attachment; filename=Factura_${numero}.pdf`);

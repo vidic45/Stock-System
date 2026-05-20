@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import { useToast } from "../components/useToast.jsx";
 
-fetch("https://stock-system-backend-3nom.onrender.com/ventas", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(dataVenta),
-});
+const API = "https://stock-system-backend-3nom.onrender.com";
 
 export default function NuevaVenta() {
   const [productos, setProductos] = useState([]);
@@ -47,26 +41,47 @@ export default function NuevaVenta() {
   const enviar = async () => {
     if (!cliente.nombre.trim())
       return show("Ingresa el nombre del cliente.", "error");
+
     const validos = items.filter((i) => i.codigo && +i.cantidad > 0);
     if (!validos.length) return show("Agrega al menos un producto.", "error");
 
     setEnviando(true);
-    const res = await fetch(`${API}/ventas`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cliente, items: validos }),
-    });
-    setEnviando(false);
 
-    if (res.ok) {
-      const data = await res.json();
-      setResultado(data);
+    try {
+      const res = await fetch(`${API}/ventas`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cliente,
+          items: validos,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText);
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "factura.pdf";
+      a.click();
+
+      // limpiar form
       setItems([{ codigo: "", cantidad: 1 }]);
       setCliente({ nombre: "", ruc: "", direccion: "" });
-    } else {
-      const e = await res.json();
-      show(e.error || "Error al registrar la venta.", "error");
+
+      show("Factura generada correctamente", "success");
+    } catch (err) {
+      console.error(err);
+      show("Error al generar la factura", "error");
     }
+
+    setEnviando(false);
   };
 
   return (
@@ -74,24 +89,6 @@ export default function NuevaVenta() {
       {Toast}
       <div className="page-title">Nueva Venta</div>
       <div className="page-sub">Registra una venta y genera la factura PDF</div>
-
-      {resultado && (
-        <div className="factura-result" style={{ marginBottom: 20 }}>
-          <div>
-            <p>✅ Factura {resultado.numero} generada</p>
-            <small>Stock descontado automáticamente</small>
-          </div>
-          <a
-            href={`${API}${resultado.pdf}`}
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-primary"
-          >
-            📄 Descargar PDF
-          </a>
-        </div>
-      )}
-
       <div
         style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 16 }}
       >
