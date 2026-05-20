@@ -11,6 +11,13 @@ Desarrollado en Chiclayo, Perú 🇵🇪
 
 ---
 
+## ¿Para quién es?
+Pequeñas empresas y negocios que manejan su inventario
+en cuaderno o Excel y quieren digitalizarse sin pagar
+licencias costosas.
+
+---
+
 ## Stack
 
 | Capa | Tecnología |
