@@ -81,6 +81,8 @@ export default function NuevaVenta() {
       show("Error al generar la factura", "error");
     }
 
+    if (enviando) return;
+
     setEnviando(false);
   };
 
@@ -132,7 +134,6 @@ export default function NuevaVenta() {
               </div>
             </div>
           </div>
-
           {/* Productos */}
           <div className="card card-pad">
             <div className="section-header" style={{ marginBottom: 14 }}>
@@ -275,14 +276,22 @@ export default function NuevaVenta() {
               <span className="mono">S/ {subtotal.toFixed(2)}</span>
             </div>
           </div>
-
           <button
             className="btn btn-primary"
-            style={{ width: "100%", marginTop: 16, justifyContent: "center" }}
-            onClick={enviar}
+            style={{
+              width: "100%",
+              marginTop: 16,
+              justifyContent: "center",
+              opacity: enviando ? 0.6 : 1,
+              pointerEvents: enviando ? "none" : "auto",
+            }}
+            onClick={() => {
+              if (enviando) return;
+              enviar();
+            }}
             disabled={enviando}
           >
-            {enviando ? "Generando..." : "🧾 Generar Factura PDF"}
+            {enviand ? "Generando factura..." : "Generar factura PDF"}
           </button>
         </div>
       </div>
