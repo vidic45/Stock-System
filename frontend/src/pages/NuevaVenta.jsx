@@ -291,7 +291,7 @@ export default function NuevaVenta() {
             }}
             disabled={enviando}
           >
-            {enviand ? "Generando factura..." : "Generar factura PDF"}
+            {enviando ? "Generando factura..." : "Generar factura PDF"}
           </button>
         </div>
       </div>
