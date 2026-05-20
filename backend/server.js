@@ -162,7 +162,6 @@ app.post("/ventas", async (req, res) => {
     })
   });
   const pdfBuffer = await response.arrayBuffer();
-  const rutaArchivo = `./facturas/Factura_${numero}.pdf`;
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Disposition", `attachment; filename=Factura_${numero}.pdf`);
   res.send(Buffer.from(pdfBuffer));
